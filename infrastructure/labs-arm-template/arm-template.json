@@ -1,0 +1,170 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "az-204-vmName": {
+            "minLength": 1,
+            "type": "String"
+        },
+        "az-204-vmAdminUserName": {
+            "minLength": 1,
+            "type": "String"
+        },
+        "az-204-vmAdminPassword": {
+            "type": "SecureString"
+        },
+        "az-204-vmUbuntuOSVersion": {
+            "defaultValue": "14.04.2-LTS",
+            "allowedValues": [
+                "12.04.5-LTS",
+                "14.04.2-LTS",
+                "15.04"
+            ],
+            "type": "String"
+        },
+        "az-204-storage-accountType": {
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_ZRS",
+                "Standard_GRS",
+                "Standard_RAGRS",
+                "Premium_LRS"
+            ],
+            "type": "String"
+        }
+    },
+    "variables": {
+        "az-204-vnetPrefix": "10.0.0.0/16",
+        "az-204-vnetSubnet1Name": "Subnet-1",
+        "az-204-vnetSubnet1Prefix": "10.0.0.0/24",
+        "az-204-vnetSubnet2Name": "Subnet-2",
+        "az-204-vnetSubnet2Prefix": "10.0.1.0/24",
+        "az-204-vmImagePublisher": "Canonical",
+        "az-204-vmImageOffer": "UbuntuServer",
+        "az-204-vmOSDiskName": "az-204-vmOSDisk",
+        "az-204-vmVmSize": "Standard_B1s",
+        "az-204-vmVnetID": "[resourceId('Microsoft.Network/virtualNetworks', 'az-204-vnet')]",
+        "az-204-vmSubnetRef": "[concat(variables('az-204-vmVnetID'), '/subnets/', variables('az-204-vnetSubnet1Name'))]",
+        "az-204-vmStorageAccountContainerName": "vhds",
+        "az-204-vmNicName": "[concat(parameters('az-204-vmName'), 'NetworkInterface')]",
+        "az-204-storage-accountName": "[concat('az204', uniqueString(resourceGroup().id))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2015-06-15",
+            "name": "az-204-vnet",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "tags": {
+                "displayName": "az-204-vnet"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "[variables('az-204-vnetPrefix')]"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "[variables('az-204-vnetSubnet1Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('az-204-vnetSubnet1Prefix')]"
+                        }
+                    },
+                    {
+                        "name": "[variables('az-204-vnetSubnet2Name')]",
+                        "properties": {
+                            "addressPrefix": "[variables('az-204-vnetSubnet2Prefix')]"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2015-06-15",
+            "name": "[variables('az-204-vmNicName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Network/virtualNetworks/', 'az-204-vnet')]"
+            ],
+            "tags": {
+                "displayName": "az-204-vmNic"
+            },
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[variables('az-204-vmSubnetRef')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2015-06-15",
+            "name": "[parameters('az-204-vmName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.Storage/storageAccounts/', variables('az-204-storage-accountName'))]",
+                "[concat('Microsoft.Network/networkInterfaces/', variables('az-204-vmNicName'))]"
+            ],
+            "tags": {
+                "displayName": "az-204-vm"
+            },
+            "properties": {
+                "hardwareProfile": {
+                    "vmSize": "[variables('az-204-vmVmSize')]"
+                },
+                "osProfile": {
+                    "computerName": "[parameters('az-204-vmName')]",
+                    "adminUsername": "[parameters('az-204-vmAdminUsername')]",
+                    "adminPassword": "[parameters('az-204-vmAdminPassword')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "[variables('az-204-vmImagePublisher')]",
+                        "offer": "[variables('az-204-vmImageOffer')]",
+                        "sku": "[parameters('az-204-vmUbuntuOSVersion')]",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "az-204-vmOSDisk",
+                        "vhd": {
+                            "uri": "[concat('http://', variables('az-204-storage-accountName'), '.blob.core.windows.net/', variables('az-204-vmStorageAccountContainerName'), '/', variables('az-204-vmOSDiskName'), '.vhd')]"
+                        },
+                        "caching": "ReadWrite",
+                        "createOption": "FromImage"
+                    }
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('az-204-vmNicName'))]"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2015-06-15",
+            "name": "[variables('az-204-storage-accountName')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [],
+            "tags": {
+                "displayName": "az-204-storage-account"
+            },
+            "properties": {
+                "accountType": "[parameters('az-204-storage-accountType')]"
+            }
+        }
+    ]
+}

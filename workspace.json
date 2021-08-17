@@ -1,0 +1,385 @@
+{
+  "version": 2,
+  "projects": {
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps/api/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/src/main.ts",
+            "tsConfig": "apps/api/tsconfig.app.json",
+            "assets": [
+              "apps/api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/src/environments/environment.ts",
+                  "with": "apps/api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/api/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/api"
+          ],
+          "options": {
+            "jestConfig": "apps/api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-interfaces": {
+      "root": "libs/api-interfaces",
+      "sourceRoot": "libs/api-interfaces/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "libs/api-interfaces/**/*.ts"
+            ]
+          }
+        }
+      }
+    },
+    "hello-world": {
+      "root": "apps/hello-world",
+      "sourceRoot": "apps/hello-world/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/hello-world",
+            "index": "apps/hello-world/src/index.html",
+            "main": "apps/hello-world/src/main.tsx",
+            "polyfills": "apps/hello-world/src/polyfills.ts",
+            "tsConfig": "apps/hello-world/tsconfig.app.json",
+            "assets": [
+              "apps/hello-world/src/favicon.ico",
+              "apps/hello-world/src/assets"
+            ],
+            "styles": [
+              "apps/hello-world/src/styles.css"
+            ],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/hello-world/src/environments/environment.ts",
+                  "with": "apps/hello-world/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "hello-world:build",
+            "hmr": true,
+            "proxyConfig": "apps/hello-world/proxy.conf.json"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "hello-world:build:production",
+              "hmr": false
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/hello-world/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/hello-world"
+          ],
+          "options": {
+            "jestConfig": "apps/hello-world/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "hello-world-e2e": {
+      "root": "apps/hello-world-e2e",
+      "sourceRoot": "apps/hello-world-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/hello-world-e2e/cypress.json",
+            "tsConfig": "apps/hello-world-e2e/tsconfig.e2e.json",
+            "devServerTarget": "hello-world:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "hello-world:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/hello-world-e2e/**/*.{js,ts}"
+            ]
+          }
+        }
+      }
+    },
+    "location-api": {
+      "root": "apps/location-api",
+      "sourceRoot": "apps/location-api/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/location-api",
+            "main": "apps/location-api/src/main.ts",
+            "tsConfig": "apps/location-api/tsconfig.app.json",
+            "assets": [
+              "apps/location-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/location-api/src/environments/environment.ts",
+                  "with": "apps/location-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "location-api:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/location-api/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/location-api"
+          ],
+          "options": {
+            "jestConfig": "apps/location-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "temperature-api": {
+      "root": "apps/temperature-api",
+      "sourceRoot": "apps/temperature-api/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/temperature-api",
+            "main": "apps/temperature-api/src/main.ts",
+            "tsConfig": "apps/temperature-api/tsconfig.app.json",
+            "assets": [
+              "apps/temperature-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/temperature-api/src/environments/environment.ts",
+                  "with": "apps/temperature-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "temperature-api:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/temperature-api/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/temperature-api"
+          ],
+          "options": {
+            "jestConfig": "apps/temperature-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "wind-api": {
+      "root": "apps/wind-api",
+      "sourceRoot": "apps/wind-api/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": [
+            "{options.outputPath}"
+          ],
+          "options": {
+            "outputPath": "dist/apps/wind-api",
+            "main": "apps/wind-api/src/main.ts",
+            "tsConfig": "apps/wind-api/tsconfig.app.json",
+            "assets": [
+              "apps/wind-api/src/assets"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/wind-api/src/environments/environment.ts",
+                  "with": "apps/wind-api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "wind-api:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": [
+              "apps/wind-api/**/*.ts"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": [
+            "coverage/apps/wind-api"
+          ],
+          "options": {
+            "jestConfig": "apps/wind-api/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "style": "css",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "css"
+      },
+      "library": {
+        "style": "css",
+        "linter": "eslint"
+      }
+    }
+  },
+  "defaultProject": "hello-world"
+}

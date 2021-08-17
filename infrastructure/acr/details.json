@@ -1,0 +1,55 @@
+{
+    "adminUserEnabled": false,
+    "anonymousPullEnabled": false,
+    "creationDate": "2021-08-16T07:14:20.005842+00:00",
+    "dataEndpointEnabled": false,
+    "dataEndpointHostNames": [],
+    "encryption": {
+      "keyVaultProperties": null,
+      "status": "disabled"
+    },
+    "id": "/subscriptions/17f99209-fe8f-432f-8b50-3ca1c0ccd3cb/resourceGroups/az-204/providers/Microsoft.ContainerRegistry/registries/reckoAz204",
+    "identity": null,
+    "location": "australiaeast",
+    "loginServer": "reckoaz204.azurecr.io",
+    "name": "reckoAz204",
+    "networkRuleBypassOptions": "AzureServices",
+    "networkRuleSet": null,
+    "policies": {
+      "exportPolicy": {
+        "status": "enabled"
+      },
+      "quarantinePolicy": {
+        "status": "disabled"
+      },
+      "retentionPolicy": {
+        "days": 7,
+        "lastUpdatedTime": "2021-08-16T07:14:24.232817+00:00",
+        "status": "disabled"
+      },
+      "trustPolicy": {
+        "status": "disabled",
+        "type": "Notary"
+      }
+    },
+    "privateEndpointConnections": [],
+    "provisioningState": "Succeeded",
+    "publicNetworkAccess": "Enabled",
+    "resourceGroup": "az-204",
+    "sku": {
+      "name": "Basic",
+      "tier": "Basic"
+    },
+    "status": null,
+    "systemData": {
+      "createdAt": "2021-08-16T07:14:20.005842+00:00",
+      "createdBy": "Lachlan.Yates@reckon.com",
+      "createdByType": "User",
+      "lastModifiedAt": "2021-08-16T07:14:20.005842+00:00",
+      "lastModifiedBy": "Lachlan.Yates@reckon.com",
+      "lastModifiedByType": "User"
+    },
+    "tags": {},
+    "type": "Microsoft.ContainerRegistry/registries",
+    "zoneRedundancy": "Disabled"
+  }
